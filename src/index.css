@@ -104,6 +104,7 @@ code {
 @import url(./blocks/window-form/__email/window-form__email.css);
 @import url(./blocks/window-form/__button/window-form__button.css);
 @import url(./blocks/window-form/__button-register/window-form__button-register.css);
+@import url(./blocks/window-form/__link/window-form__link.css);
 
 /* popup-info InfoTooltip */
 @import url(./blocks/popup-info/__title/popup-info__title.css);

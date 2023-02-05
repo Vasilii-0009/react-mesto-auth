@@ -30,10 +30,11 @@ function App() {
   const navigateMainPage = useNavigate()
   const navigate = useNavigate()
 
-  const [loggedIn, setLoggidIn] = useState(true)
+  const [loggedIn, setLoggidIn] = useState(false)
   const [userEmail, setUserEmail] = useState('')
 
   const [isInfoTooltip, setInfoTooltip] = useState(false)
+  const [isValueMassegInfoTooltip, setValueMassegInfoTooltip] = useState(false)
 
   //-------------  --------------//
   function handleEditProfileClick() {
@@ -92,10 +93,12 @@ function App() {
   // функция  удаление карточки
   function handleCardDelete(card) {
 
-    dataApi.deleteCard(card._id).then(() => {
+    dataApi.deleteCard(card._id).then((data) => {
+      console.log(data)
+
       setCard((state) => state.filter((item) => {
         if (item._id !== card._id) {
-          return state
+          return cardsContext
         }
       }))
     }).catch((err) => {
@@ -131,52 +134,55 @@ function App() {
   //------------pr12--------------//
   //регистрация пользовтеля 
   function handleRegisterUser(data) {
+
     dataAuthApi.registerUser(data.email, data.password).then((infoUser) => {
+      setInfoTooltip(true)
+      setValueMassegInfoTooltip(true)
       navigate('/sign-in')
     }).catch((err) => {
+      setInfoTooltip(true)
+      setValueMassegInfoTooltip(false)
       console.log(`400 - некорректно заполнено одно из полей `)
     })
   }
   //получение токена пользователя
   function handleTokenUser(data) {
     dataAuthApi.tokenUser(data.email, data.password).then((tokenUser) => {
-      setInfoTooltip(true)
       localStorage.setItem('token', tokenUser.token);
       setLoggidIn(true)
       navigateMainPage('/', { replace: true })
-      //функия отпарвления токена пользователя на сервер
-      getToken(tokenUser.token)
-
     }).catch((err) => {
       console.log(` ${data.email === "" ? '400 - не передано одно из полей' : "пользователь с email не найден "} `)
     })
   }
-  //отправляем  токена пользователя на сервер
-  function getToken(data) {
-    dataAuthApi.getToken(data).then((data) => {
-      setUserEmail(data.data.email)
-    }).catch(() => {
-      console.log(`${data === undefined ? '400 — Токен не передан или передан не в том формате' : '401 — Переданный токен некорректен '}`
-      )
-    })
-  }
   // проверяем токен пользователя для входа на сайт без авторизации 
   useEffect(() => {
+
     tokenCheck()
   }, [])
 
   function tokenCheck() {
-    let jwt = localStorage.getItem('token')
+    const jwt = localStorage.getItem('token')
+
     if (jwt) {
       dataAuthApi.getToken(jwt).then((data) => {
         setUserEmail(data.data.email)
         setLoggidIn(true)
         navigateMainPage('/', { replace: true })
+      }).catch(() => {
+        console.log(`${jwt === null ? '401 — Переданный токен некорректен ' : ' 400 — Токен не передан или передан не в том формате'}`
+        )
       })
     }
+
   }
 
-
+  const navigateHeader = useNavigate()
+  function signOut() {
+    localStorage.removeItem('token');
+    navigateHeader("/sign-in", { replace: true })
+    setLoggidIn(false)
+  }
 
   return (
 
@@ -184,7 +190,7 @@ function App() {
       <CardsContext.Provider value={cardsContext}>
         <CurrentUserContext.Provider value={currentUserContext}>
 
-          <Header userEmail={userEmail} />
+          <Header signOut={signOut} userEmail={userEmail} />
 
           <Routes>
             <Route path="/sign-up" element={<Register handleRegisterUser={handleRegisterUser} />} />
@@ -214,7 +220,7 @@ function App() {
           <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
           <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
 
-          <InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltip} />
+          <InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltip} valueMasseg={isValueMassegInfoTooltip} />
 
 
         </CurrentUserContext.Provider>

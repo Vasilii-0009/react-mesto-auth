@@ -8,6 +8,7 @@ function Login(props) {
     e.preventDefault()
     const { email, password } = userInfo
     props.handleTokenUser({ email, password })
+    // setUserName({ email: '', password: '' })
   }
 
   function handleChange(e) {

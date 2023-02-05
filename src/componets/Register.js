@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import WindowWithForm from "./WindowWithForm";
+import { Link } from "react-router-dom";
 
 
 function Register(props) {
@@ -25,7 +26,7 @@ function Register(props) {
         <input name='email' onChange={handleChange} value={userInfo.email || ""} className="window-form__input window-form__email" type="email" placeholder="Email" ></input>
         <input name='password' onChange={handleChange} value={userInfo.password || ""} className="window-form__input window-form__password" type="password" placeholder="Пароль" ></input>
         <button className="window-form__button" type="submit">Зарегистрироваться</button>
-        <div className="window-form__button-register">Уже зарегистрированы? Войти</div>
+        <div className="window-form__button-register">Уже зарегистрированы? <Link className="window-form__button-register window-form__link" to='/sign-in' > Войти </Link> </div>
       </WindowWithForm>
     </>
 
