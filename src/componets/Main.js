@@ -32,7 +32,10 @@ function Main(props) {
 
         {cardsContext.map((card) => {
           return (
-            <Card handleDeleteClick={props.onCardDelete} handleLikeClick={props.onCardLike} cardInfo={card} onCardClick={props.onCardClick} key={card._id} />
+            <Card
+              //  handleDeleteClick={props.onCardDelete} 
+              onClickConfirmasion={props.onPopupConfirmasin}
+              handleLikeClick={props.onCardLike} cardInfo={card} onCardClick={props.onCardClick} key={card._id} />
           )
         })}
       </section>

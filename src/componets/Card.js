@@ -20,8 +20,11 @@ function Card(props) {
     props.handleLikeClick(props.cardInfo)
   }
 
-  function handleDeleteClick() {
-    props.handleDeleteClick(props.cardInfo)
+  // function handleDeleteClick() {
+  //   props.handleDeleteClick(props.cardInfo)
+  // }
+  function handlePopupConfirmasion() {
+    props.onClickConfirmasion(props.cardInfo)
   }
 
   return (
@@ -37,7 +40,10 @@ function Card(props) {
         </div>
 
       </div>
-      {isOwn && <button onClick={handleDeleteClick} type="button" className="elements__basket"></button>}
+      {isOwn && <button
+        // onClick={handleDeleteClick} 
+        onClick={handlePopupConfirmasion}
+        type="button" className="elements__basket"></button>}
 
     </div>
   )

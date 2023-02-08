@@ -17,6 +17,8 @@ import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
 
+import PopupConfirmasion from './PopupConfirmasion';
+
 function App() {
 
   const [selectedCard, setSelectedCard] = useState({ name: '', link: '' })
@@ -26,6 +28,10 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false)
+  //state попапа потвирждения для удаление фотографий 
+  const [isPopupConfirmasion, setPopupConfirmasion] = useState(false)
+  const [isdeleteCard, setdeleteCard] = useState(null)
+
   //------------pr12--------------//
   const navigateMainPage = useNavigate()
   const navigate = useNavigate()
@@ -52,6 +58,8 @@ function App() {
     setEditAvatarPopupOpen(false)
     setSelectedCard({ name: '' })
     setInfoTooltip(false)
+    setPopupConfirmasion(false)
+    // setdeleteCard(null)
   }
 
   useEffect(() => {
@@ -92,9 +100,7 @@ function App() {
   }
   // функция  удаление карточки
   function handleCardDelete(card) {
-
     dataApi.deleteCard(card._id).then((data) => {
-      console.log(data)
 
       setCard((state) => state.filter((item) => {
         if (item._id !== card._id) {
@@ -123,7 +129,6 @@ function App() {
   }
   //добавление фоторграфии
   function handleAddPlaceSubmit(data) {
-    console.log(data)
     dataApi.creatCard(data.name, data.link).then((newCard) => {
       setCard([newCard, ...cardsContext])
     }).catch((err) => {
@@ -174,7 +179,6 @@ function App() {
         )
       })
     }
-
   }
 
   const navigateHeader = useNavigate()
@@ -182,6 +186,12 @@ function App() {
     localStorage.removeItem('token');
     navigateHeader("/sign-in", { replace: true })
     setLoggidIn(false)
+  }
+
+  // функция для popupConfirmasion
+  function handlePopupConfirmasion(card) {
+    setPopupConfirmasion(true)
+    setdeleteCard(card)
   }
 
   return (
@@ -203,7 +213,8 @@ function App() {
                   onEditAvatar={handleEditAvatarClick}
                   onCardClick={setSelectedCard}
                   onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete} />
+                  onPopupConfirmasin={handlePopupConfirmasion}
+                />
                 <Footer />
               </>
             }
@@ -219,6 +230,7 @@ function App() {
           <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
           <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
           <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+          <PopupConfirmasion isOpen={isPopupConfirmasion} onClose={closeAllPopups} onDeleteCard={handleCardDelete} cardDelete={isdeleteCard} />
 
           <InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltip} valueMasseg={isValueMassegInfoTooltip} />
 
