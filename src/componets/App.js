@@ -30,8 +30,7 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false)
   //state попапа потвирждения для удаление фотографий 
   const [isPopupConfirmasion, setPopupConfirmasion] = useState(false)
-  const [isdeleteCard, setdeleteCard] = useState(null)
-
+  const [isdeleteCard, setdeleteCard] = useState({})
   //------------pr12--------------//
   const navigateMainPage = useNavigate()
   const navigate = useNavigate()
@@ -59,7 +58,7 @@ function App() {
     setSelectedCard({ name: '' })
     setInfoTooltip(false)
     setPopupConfirmasion(false)
-    // setdeleteCard(null)
+    //setdeleteCard({})
   }
 
   useEffect(() => {
@@ -100,6 +99,7 @@ function App() {
   }
   // функция  удаление карточки
   function handleCardDelete(card) {
+
     dataApi.deleteCard(card._id).then((data) => {
 
       setCard((state) => state.filter((item) => {
