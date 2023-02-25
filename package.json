@@ -1,8 +1,7 @@
 {
   "name": "mesto-react",
   "version": "0.1.0",
-  "private": false,
-  "homepage": "https://vasilii-0009.github.io/react-mesto-auth/",
+  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
